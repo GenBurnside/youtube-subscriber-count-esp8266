@@ -47,10 +47,30 @@ void loop() {
   String request = "GET " + resource + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n";
   client.print(request);
 
-  while (client.connected()) {
-    String line = client.readStringUntil('\n');
-    Serial.println(line);
+  // skip to end of headers in response stream
+  client.find("\r\n\r\n");
+
+  // buffer size calculated from https://bblanchon.github.io/ArduinoJson/assistant/
+  StaticJsonBuffer<680> jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(client);
+
+  if (!root.success()) {
+    Serial.println("JSON parsing failed");
+    return;
   }
+
+  JsonObject& statistics = root["items"][0]["statistics"];
+
+  const int videoCount = statistics["videoCount"];
+  const int viewCount = statistics["viewCount"];
+  const int subscriberCount = statistics["subscriberCount"];
+
+  Serial.println("Video count: " + String(videoCount));
+  Serial.println("View count: " + String(viewCount));
+  Serial.println("Subscriber count: " + String(subscriberCount));
+
+  matrix.print(subscriberCount, DEC);
+  matrix.writeDisplay();
 
   // wait 60 seconds
   delay(1000 * 60);

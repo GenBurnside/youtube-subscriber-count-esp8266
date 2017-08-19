@@ -13,7 +13,7 @@ String channel = "";
 String apiKey = "";
 String resource = "/youtube/v3/channels?id=" + channel + "&part=statistics&key=" + apiKey;
 const char host[] = "content.googleapis.com";
-const char* fingerprint = "ef d7 9c 64 94 7c 7e c4 7b d8 6f b3 0b 0a c4 b6 7a 97 7d f9";
+const char* fingerprint = "85 e8 b7 fe 08 08 23 f4 a2 ae 47 d1 1b 8c 41 7d c8 e6 a8 d2";
 
 Adafruit_7segment matrix = Adafruit_7segment();
 WiFiClientSecure client;

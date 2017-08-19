@@ -33,11 +33,13 @@ void loop() {
 
   if (!client.connect(host, 443)) {
     Serial.println("Could not connect to server");
+    error();
     return;
   }
 
   if (!client.verify(fingerprint, host)) {
     Serial.println("Unexpected SSL certificate");
+    error();
     return;
   }
 
@@ -56,6 +58,7 @@ void loop() {
 
   if (!root.success()) {
     Serial.println("JSON parsing failed");
+    error();
     return;
   }
 
@@ -90,4 +93,12 @@ void connectToWifi() {
   Serial.println("IP address: ");
   IPAddress ip = WiFi.localIP();
   Serial.println(ip);
+}
+
+void error() {
+  matrix.print(100000, DEC);
+  matrix.writeDisplay();
+
+  // wait 60 seconds
+  delay(1000 * 60);
 }
